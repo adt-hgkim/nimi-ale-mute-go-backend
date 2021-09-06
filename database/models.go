@@ -12,15 +12,15 @@ type User struct {
 	Access   string
 	Refresh  string
 
-	Created time.Time `gorm:"default:null"`
-	Updated time.Time `gorm:"default:null"`
-	Deleted gorm.DeletedAt
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt
 }
 
 type Word struct {
 	Id uint64 `gorm:"primaryKey;autoIncrement:true"`
 
-	Created time.Time `gorm:"default:null"`
-	Updated time.Time `gorm:"default:null"`
-	Deleted gorm.DeletedAt
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt
 }

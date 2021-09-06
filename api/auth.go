@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-type _ struct{}
+type authStruct struct{}
 
-func (_) Get(context *gin.Context) {
+func (authStruct) Get(context *gin.Context) {
 	type Body struct {
 		Email    string `form:"email" json:"email" xml:"email"`
 		Password string `form:"password" json:"password" xml:"password"`
@@ -18,37 +18,24 @@ func (_) Get(context *gin.Context) {
 	}
 	var body Body
 	if err := context.ShouldBindJSON(&body); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"status":  400,
-			"message": "Bad request.",
-			"value":   err.Error(),
-		})
+		service.Response(context, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
 	user := User{}
 	response := DB.Where("email = ?", body.Email).First(&user)
 	if response.Error != nil {
-		context.JSON(400, gin.H{
-			"status":  http.StatusUnauthorized,
-			"message": response.Error.Error(),
-		})
+		service.Response(context, http.StatusUnauthorized, response.Error.Error(), nil)
 		return
 	}
 
 	if service.Hash.CheckPasswordHash(body.Password, user.Password) == false {
-		context.JSON(400, gin.H{
-			"status":  http.StatusUnauthorized,
-			"message": "Wrong password",
-		})
+		service.Response(context, http.StatusUnauthorized, "Wrong password", nil)
 		return
 	}
 
-	context.JSON(200, gin.H{
-		"status":  http.StatusOK,
-		"message": "Signed in",
-	})
+	service.Response(context, http.StatusOK, "Signed in", nil)
 	return
 }
 
-var Auth _
+var Auth authStruct

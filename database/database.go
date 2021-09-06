@@ -8,17 +8,14 @@ import (
 var DB, _ = gorm.Open(sqlite.Open("db.sqlite"), &gorm.Config{})
 
 func Migrate(dst ...interface{}) {
-	err := DB.AutoMigrate(dst...)
-	if err != nil {
-		panic(err)
-	}
+	var err error
 
 	err = DB.Migrator().DropTable(dst...)
 	if err != nil {
 		panic(err)
 	}
 
-	err = DB.AutoMigrate(dst...)
+	err = DB.Migrator().AutoMigrate(dst...)
 	if err != nil {
 		panic(err)
 	}

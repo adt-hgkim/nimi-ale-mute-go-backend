@@ -6,13 +6,7 @@ import (
 )
 
 func InitRouter(router *gin.Engine) {
-	// USERS
 	router.POST("users", api.Users.Post)
-
-	// USERS/:id
-	//router.PATCH()
-	//router.DELETE()
-
-	// AUTHS
+	router.DELETE("users/:id", api.Users.SoftDelete)
 	router.GET("auth", api.Auth.Get)
 }

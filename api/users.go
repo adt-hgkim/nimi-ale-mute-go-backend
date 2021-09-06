@@ -7,20 +7,18 @@ import (
 	"net/http"
 )
 
-type _ struct{}
+type usersStruct struct{}
 
-func (_) Post(context *gin.Context) {
+func (usersStruct) Post(context *gin.Context) {
 	type Body struct {
 		Email    string `form:"email" json:"email" xml:"email"  binding:"required"`
 		Password string `form:"password" json:"password" xml:"password" binding:"required"`
 	}
 	var body Body
 	if err := context.ShouldBindJSON(&body); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"status":  400,
-			"message": err.Error(),
-		})
+		service.Response(context, http.StatusBadRequest, err.Error(), nil)
 		return
+
 	}
 
 	hashedPassword, _ := service.Hash.HashPassword(body.Password)
@@ -29,18 +27,38 @@ func (_) Post(context *gin.Context) {
 	response := DB.Create(&user)
 
 	if response.Error != nil {
-		context.JSON(400, gin.H{
-			"status":  http.StatusUnauthorized,
-			"message": response.Error.Error(),
-		})
+		service.Response(context, http.StatusUnauthorized, response.Error.Error(), nil)
 		return
 	}
 
-	context.JSON(200, gin.H{
-		"status":  http.StatusOK,
-		"message": "Signed up",
-	})
+	service.Response(context, http.StatusOK, "Signed up", nil)
 	return
 }
 
-var Users _
+func (usersStruct) SoftDelete(context *gin.Context) {
+	type URI struct {
+		ID string `uri:"id" binding:"required"`
+	}
+	var uri URI
+
+	if err := context.ShouldBindUri(&uri); err != nil {
+		service.Response(context, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+
+	var user User
+	if response := DB.Where("id = ?", uri.ID).First(&user); response.Error != nil {
+		service.Response(context, http.StatusNotFound, response.Error.Error(), nil)
+		return
+	}
+
+	if response := DB.Delete(&user); response.Error != nil {
+		service.Response(context, http.StatusInternalServerError, response.Error.Error(), nil)
+		return
+	}
+
+	service.Response(context, http.StatusOK, "Soft deleted", nil)
+	return
+}
+
+var Users usersStruct
