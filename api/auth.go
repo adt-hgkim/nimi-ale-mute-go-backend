@@ -1,15 +1,15 @@
 package api
 
 import (
-	. "github.com/adt-hgkim/nimi-ale-mute/database"
-	"github.com/adt-hgkim/nimi-ale-mute/service"
+	. "github.com/adt-hgkim/nimi-ale-mute-monsi/database"
+	"github.com/adt-hgkim/nimi-ale-mute-monsi/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type _ struct{}
+type authStruct struct{}
 
-func (_) Get(context *gin.Context) {
+func (authStruct) Get(context *gin.Context) {
 	type Body struct {
 		Email    string `form:"email" json:"email" xml:"email"`
 		Password string `form:"password" json:"password" xml:"password"`
@@ -51,4 +51,4 @@ func (_) Get(context *gin.Context) {
 	return
 }
 
-var Auth _
+var Auth authStruct

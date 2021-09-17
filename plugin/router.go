@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/adt-hgkim/nimi-ale-mute/api"
+	"github.com/adt-hgkim/nimi-ale-mute-monsi/api"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/adt-hgkim/nimi-ale-mute/database"
-	"github.com/adt-hgkim/nimi-ale-mute/plugin"
+	"github.com/adt-hgkim/nimi-ale-mute-monsi/database"
+	"github.com/adt-hgkim/nimi-ale-mute-monsi/plugin"
 	"github.com/gin-gonic/gin"
 )
 

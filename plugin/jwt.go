@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-type _ struct{}
+type jwtStruct struct{}
 
-func (_) CreateAccessToken(userId uint32) (string, error) {
+func (jwtStruct) CreateAccessToken(userId uint32) (string, error) {
 	if err := os.Setenv("ACCESS_SECRET", "tan-jan-aku"); err != nil {
 		return "", err
 	}
@@ -24,7 +24,7 @@ func (_) CreateAccessToken(userId uint32) (string, error) {
 	return token, nil
 }
 
-func (_) CreateRefreshToken(userId uint32) (string, error) {
+func (jwtStruct) CreateRefreshToken(userId uint32) (string, error) {
 	if err := os.Setenv("REFRESH_SECRET", "tan-jan-aku"); err != nil {
 		return "", err
 	}
@@ -40,8 +40,8 @@ func (_) CreateRefreshToken(userId uint32) (string, error) {
 	return token, nil
 }
 
-func (_) CheckToken(userId uint32) (string, error) {
+func (jwtStruct) CheckToken(userId uint32) (string, error) {
 	return "", nil
 }
 
-var Jwt _
+var Jwt jwtStruct
