@@ -6,6 +6,14 @@ import (
 )
 
 func InitRouter(router *gin.Engine) {
+
+	router.GET("", func(context *gin.Context) {
+
+		context.JSON(200, gin.H{
+			"message": "nimi ale mute monsi",
+		})
+	})
+
 	// USERS
 	router.POST("users", api.Users.Post)
 
